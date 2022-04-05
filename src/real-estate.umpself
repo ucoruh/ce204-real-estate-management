@@ -1,0 +1,78 @@
+
+class Address
+{
+  Integer numberOnStreet;
+  Integer apartmentOrUnit;
+  street;
+  city;
+  postalCode;
+}
+
+class GPSCoord
+{
+  Double lattitude;
+  Double longitude;
+}
+
+class Property
+{
+  Address propertyAddress;
+  Integer numberBedroom;
+  Integer numberBathroom;
+  Integer squareFeet;
+  Integer numFloor;
+  GPSCoord gpsCoord;
+  * properties -- 1 Neighbourhood neighbourhood;
+  before addPropertySale { if (propertySales.contains(aPropertySale)) { return false; } }
+  before addPropertyForSale { if (propertyForSales.contains(aPropertyForSale)) { return false; } }
+}
+
+class Neighbourhood
+{
+  description;
+  GPSCoord gpsCoordsOfBoundaries;
+  before addProperty { if (properties.contains(aProperty)) { return false; } }
+  before addAgent { if (agents.contains(aAgent)) { return false; } }
+}
+
+class PropertySale
+{
+  Integer salePrice;
+  seller;
+  buyer;
+  * propertySales -- 1 Property property;
+}
+
+class OpenHouse
+{
+  Date date;
+  Time startTime;
+  Time endTime;
+  * openHouses -- 1 PropertyForSale propertyForSale;
+  * openHouses -- 0..1 Agent agentInCharge;
+}
+
+class Agent
+{
+  name;
+  licenseNumber;
+  emailAddress;
+  officePhoneNumber;
+  cellPhoneNumber;
+  Address officeAddress;
+  * agents -- * Neighbourhood specializingNeighbourhoods;
+  before addSpecializingNeighbourhood { if (specializingNeighbourhoods.contains(aSpecializingNeighbourhood)) { return false; } }
+  before addOpenHous { if (openHouses.contains(aOpenHous)) { return false; } }
+  before addPropertyForSale { if (propertyForSales.contains(aPropertyForSale)) { return false; } }
+}
+
+class PropertyForSale
+{
+  Integer listingNumber;
+  Integer askingPrice;
+  Date dateListedForSale;
+  * propertyForSales -- 1 Property listedProperty;
+  * propertyForSales -- 0..1 Agent listingAgent;
+  0..1 propertyForSale -- 0..1 PropertySale propertySale;
+  before addOpenHous { if (openHouses.contains(aOpenHous)) { return false; } }
+}

@@ -1,0 +1,103 @@
+model real-estate
+
+class Address
+  attributes
+    numberOnStreet : Integer
+    apartmentOrUnit : Integer
+    street : String
+    city : String
+    postalCode : String
+end
+
+class GPSCoord
+  attributes
+    lattitude : Real
+    longitude : Real
+end
+
+class Property
+  attributes
+    propertyAddress : Address
+    numberBedroom : Integer
+    numberBathroom : Integer
+    squareFeet : Integer
+    numFloor : Integer
+    gpsCoord : GPSCoord
+end
+
+class Neighbourhood
+  attributes
+    description : String
+    gpsCoordsOfBoundaries : GPSCoord
+end
+
+class PropertySale
+  attributes
+    salePrice : Integer
+    seller : String
+    buyer : String
+end
+
+class OpenHouse
+  attributes
+    date : String
+    startTime : String
+    endTime : String
+end
+
+class Agent
+  attributes
+    name : String
+    licenseNumber : String
+    emailAddress : String
+    officePhoneNumber : String
+    cellPhoneNumber : String
+    officeAddress : Address
+end
+
+class PropertyForSale
+  attributes
+    listingNumber : Integer
+    askingPrice : Integer
+    dateListedForSale : String
+end
+
+association Neighbourhood__Property between 
+  Property[*] 
+  Neighbourhood[1]
+end
+
+association Property__PropertySale between 
+  PropertySale[*] 
+  Property[1]
+end
+
+association __listedProperty between 
+  PropertyForSale[*] 
+  Property[1]
+end
+
+association __specializingNeighbourhoods between 
+  Agent[*] 
+  Neighbourhood[*]
+end
+
+association PropertyForSale__PropertySale between 
+  PropertyForSale[0 -- 1] 
+  PropertySale[0 -- 1]
+end
+
+association OpenHouse__PropertyForSale between 
+  OpenHouse[*] 
+  PropertyForSale[1]
+end
+
+association __agentInCharge between 
+  OpenHouse[*] 
+  Agent[0 -- 1]
+end
+
+association __listingAgent between 
+  PropertyForSale[*] 
+  Agent[0 -- 1]
+end
